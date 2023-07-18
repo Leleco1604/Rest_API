@@ -1,9 +1,9 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.orm import scoped_session, sessionmaker, relationship
+from sqlalchemy.orm import scoped_session, sessionmaker, relationship, declarative_base
 from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine('sqlite:///atividades.db', convert_unicode=True)
+engine = create_engine('sqlite:///atividades.db')
 db_session = scoped_session(sessionmaker(autocommit=False, bind=engine))
 
 Base = declarative_base()
@@ -19,6 +19,16 @@ class Pessoa(Base):
 
     def __repr__(self):
         return '<Pessoa {}>'.format(self.nome)
+    
+    def save(self):
+        db_session.add(self)
+        db_session.commit()
+
+    def delete(self):
+        db_session.delete(self)
+        db_session.commit()    
+
+
 
 
 class Atividade(Base):
@@ -27,6 +37,17 @@ class Atividade(Base):
     nome = Column(String(80))
     pessoa_id = Column(Integer, ForeignKey('pessoas.id'))
     pessoa = relationship("Pessoa")
+
+    def __repr__(self):
+        return '<Atividades {}>'.format(self.nome)
+    
+    def save(self):
+        db_session.add(self)
+        db_session.commit()
+
+    def delete(self):
+        db_session.delete(self)
+        db_session.commit()    
 
 
 def init_db():
