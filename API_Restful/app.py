@@ -2,6 +2,7 @@ from models import Atividades
 from flask import Flask, request
 from flask_restful import Resource, Api
 from models import Pessoas
+from flask_httpauth import HTTPBasicAuth
 
 app = Flask(__name__)
 api = Api(app)
